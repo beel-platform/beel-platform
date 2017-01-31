@@ -1,0 +1,33 @@
+#!/bin/bash
+
+PKG_BUILD_HOME=$(hab pkg path bbh/php5)
+
+symlink ()
+{
+  if [ -e ${2} ]; then
+    rm -rfv ${2}
+  fi
+  ln -sv ${1} ${2}
+}
+
+directory ()
+{
+  if [ ! -d ${1} ]; then
+    mkdir -p ${1}
+  fi
+}
+
+symlink $PKG_BUILD_HOME/bin {{pkg.svc_path}}/bin
+symlink $PKG_BUILD_HOME/sbin {{pkg.svc_path}}/sbin
+symlink $PKG_BUILD_HOME/include {{pkg.svc_path}}/include
+symlink $PKG_BUILD_HOME/lib {{pkg.svc_path}}/lib
+symlink $PKG_BUILD_HOME/php {{pkg.svc_path}}/php
+directory {{pkg.svc_path}}/etc
+symlink {{pkg.svc_path}}/config/php-fpm.conf {{pkg.svc_path}}/etc/php-fpm.conf
+symlink {{pkg.svc_path}}/config/php.ini {{pkg.svc_path}}/php.ini
+directory {{pkg.svc_path}}/var/run
+directory {{pkg.svc_path}}/var/log
+chown -R hab:hab {{pkg.svc_path}}/var/log
+symlink {{pkg.svc_path}}/var/log {{pkg.svc_path}}/log
+cd {{pkg.svc_path}}
+exec {{pkg.svc_path}}/sbin/php-fpm -F -p {{pkg.svc_path}} --fpm-config {{pkg.svc_path}}/etc/php-fpm.conf 2>&1

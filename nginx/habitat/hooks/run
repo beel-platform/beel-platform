@@ -1,0 +1,30 @@
+#!/bin/bash
+
+export HOME={{pkg.svc_data_path}}
+PKG_HOME=$(hab pkg path bbh/nginx)
+
+symlink ()
+{
+  if [ -e ${2} ]; then
+    rm -rfv ${2}
+  fi
+  ln -sv ${1} ${2}
+}
+
+directory ()
+{
+  if [ -e ${1} ]; then
+    rm -rfv ${1}
+  fi
+  mkdir -p ${1}
+}
+
+symlink ${PKG_HOME}/sbin {{pkg.svc_path}}/sbin
+
+directory {{pkg.svc_var_path}}/www
+cp -rv ${PKG_HOME}/www/* {{pkg.svc_var_path}}/www/
+chmod 755 {{pkg.svc_var_path}}/www
+chmod 755 {{pkg.svc_var_path}}
+
+cd {{pkg.svc_path}}
+exec {{pkg.svc_path}}/sbin/nginx 2>&1
