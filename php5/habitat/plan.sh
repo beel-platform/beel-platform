@@ -12,6 +12,7 @@ pkg_dirname=${pkg_distname}-${pkg_version}
 pkg_shasum=499b844c8aa7be064c111692e51a093ba94e54d2d9abb01e70ea76183a1825bb
 pkg_deps=(core/libxml2 core/openssl core/curl core/libpng core/libjpeg-turbo core/zlib)
 pkg_build_deps=(core/bison2 core/gcc core/make core/re2c)
+pkg_sbin_dirs=(sbin)
 pkg_bin_dirs=(bin)
 pkg_lib_dirs=(lib)
 pkg_include_dirs=(include)
@@ -59,6 +60,8 @@ do_build ()
     CXXFLAGS="$CXXFLAGS" \
     --bindir="$pkg_prefix/bin" \
     --sbindir="$pkg_prefix/sbin" \
+    --sysconfdir="$pkg_prefix/etc" \
+    --with-config-file-path="$pkg_prefix/config" \
     --enable-fpm \
     --with-mysql=mysqlnd \
     --with-pdo-mysql=mysqlnd \
@@ -75,6 +78,8 @@ do_build ()
 do_install ()
 {
   make -j8 install
+  if [[ -e $pkg_prefix/etc/php-fpm.conf ]]; then rm -fv $pkg_prefix/etc/php-fpm.conf; fi
+  ln -sv $pkg_prefix/config/php-fpm.conf $pkg_prefix/etc/php-fpm.conf
 }
 
 do_check()
