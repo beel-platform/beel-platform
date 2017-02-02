@@ -53,17 +53,18 @@ do_prepare() {
 
 do_build ()
 {
-  ./configure --prefix=$pkg_prefix \
+  ./configure --prefix=${pkg_prefix} \
     CFLAGS="$CFLAGS" \
     LDFLAGS="$LDFLAGS" \
     CPPFLAGS="$CPPFLAGS" \
     CXXFLAGS="$CXXFLAGS" \
-    --bindir="$pkg_prefix/bin" \
-    --sbindir="$pkg_prefix/sbin" \
-    --sysconfdir="$pkg_prefix/etc" \
-    --with-config-file-path="$pkg_prefix/config" \
+    --bindir="${pkg_prefix}/bin" \
+    --sbindir="${pkg_prefix}/sbin" \
+    --sysconfdir="${pkg_svc_config_path}/etc" \
+    --with-config-file-path="${pkg_svc_config_path}" \
     --enable-fpm \
     --with-mysql=mysqlnd \
+    --with-mysqli=mysqlnd \
     --with-pdo-mysql=mysqlnd \
     --enable-opcache \
     --without-pear \
@@ -72,14 +73,12 @@ do_build ()
     --with-jpeg-dir \
     --with-zlib-dir
     # --with-openssl=/usr
-  make -j8
+  make -j4
 }
 
 do_install ()
 {
-  make -j8 install
-  if [[ -e $pkg_prefix/etc/php-fpm.conf ]]; then rm -fv $pkg_prefix/etc/php-fpm.conf; fi
-  ln -sv $pkg_prefix/config/php-fpm.conf $pkg_prefix/etc/php-fpm.conf
+  make -j4 install
 }
 
 do_check()
