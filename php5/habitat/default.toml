@@ -1,0 +1,6 @@
+[fpm]
+pid = "/hab/svc/php5/var/run/php-fpm.pid"
+error_log = "/hab/svc/php5/var/log/php-fpm.log"
+user = "hab"
+group = "hab"
+listen = "127.0.0.1:8080"
