@@ -4,3 +4,8 @@ error_log = "/hab/svc/php5/var/log/php-fpm.log"
 user = "hab"
 group = "hab"
 listen = "127.0.0.1:8080"
+
+[ini]
+memory_limit = "128M"
+error_reporting = "E_ALL"
+date_timezone = "America/New_York"
