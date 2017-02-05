@@ -1,6 +1,5 @@
 #!/bin/bash
 
-export HOME={{pkg.svc_data_path}}
 PKG_HOME=$(hab pkg path bbh/nginx)
 
 symlink ()
@@ -19,12 +18,9 @@ directory ()
   mkdir -p ${1}
 }
 
-symlink ${PKG_HOME}/sbin {{pkg.svc_path}}/sbin
-
 directory {{pkg.svc_var_path}}/www
 cp -rv ${PKG_HOME}/www/* {{pkg.svc_var_path}}/www/
 chmod 755 {{pkg.svc_var_path}}/www
 chmod 755 {{pkg.svc_var_path}}
 
-cd {{pkg.svc_path}}
-exec {{pkg.svc_path}}/sbin/nginx 2>&1
+exec ${PKG_HOME}/sbin/nginx 2>&1
