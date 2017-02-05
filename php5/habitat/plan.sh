@@ -1,7 +1,7 @@
 pkg_origin=bbh
 pkg_name=php5
 pkg_distname=php
-pkg_version=5.6.29
+pkg_version=5.6.30
 pkg_maintainer="Basilio Briceno <bbh@briceno.mx>"
 pkg_license=('PHP-3.01')
 pkg_upstream_url=http://php.net/
@@ -9,7 +9,7 @@ pkg_description="PHP is a popular general-purpose scripting language that is esp
 pkg_source=https://php.net/get/${pkg_distname}-${pkg_version}.tar.bz2/from/this/mirror
 pkg_filename=${pkg_distname}-${pkg_version}.tar.bz2
 pkg_dirname=${pkg_distname}-${pkg_version}
-pkg_shasum=499b844c8aa7be064c111692e51a093ba94e54d2d9abb01e70ea76183a1825bb
+pkg_shasum=a105c293fa1dbff118b5b0ca74029e6c461f8c78f49b337a2a98be9e32c27906
 pkg_deps=(core/libxml2 core/openssl core/curl core/libpng core/libjpeg-turbo core/zlib)
 pkg_build_deps=(core/bison2 core/gcc core/make core/re2c)
 pkg_sbin_dirs=(sbin)
@@ -78,12 +78,12 @@ do_build ()
 
 do_install ()
 {
-  make -j4 install
+  make install
 }
 
 do_check()
 {
-  make -j8 test
+  make -j4 test
 }
 
 do_end()
