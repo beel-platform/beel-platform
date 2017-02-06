@@ -2,14 +2,6 @@
 
 PKG_HOME=$(hab pkg path bbh/nginx)
 
-symlink ()
-{
-  if [ -e ${2} ]; then
-    rm -rfv ${2}
-  fi
-  ln -sv ${1} ${2}
-}
-
 directory ()
 {
   if [ -e ${1} ]; then
