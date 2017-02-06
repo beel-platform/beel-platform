@@ -54,7 +54,6 @@ do_build ()
     --with-http_sub_module \
     --with-http_slice_module
   make -j4
-  # cp -v ${HAB_CACHE_SRC_PATH}/${pkg_dirname}/objs/nginx ${pkg_prefix}/sbin/
   mkdir -p ${pkg_prefix}/www
   cp -rv ${PLAN_CONTEXT}/../source/* ${pkg_prefix}/www
 }
