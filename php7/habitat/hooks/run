@@ -1,0 +1,26 @@
+#!/bin/bash
+
+PKG_HOME=$(hab pkg path bbh/php7)
+
+symlink ()
+{
+  if [ -e ${2} ]; then
+    rm -rfv ${2}
+  fi
+  ln -sv ${1} ${2}
+}
+
+directory ()
+{
+  if [ ! -d ${1} ]; then
+    mkdir -p ${1}
+  fi
+}
+
+directory {{pkg.svc_path}}/var/run
+directory {{pkg.svc_path}}/var/log
+chown -R {{cfg.fpm.user}}:{{cfg.fpm.group}} {{pkg.svc_path}}/var/log
+directory {{pkg.svc_config_path}}/etc
+symlink {{pkg.svc_config_path}}/php-fpm.conf {{pkg.svc_config_path}}/etc/php-fpm.conf
+
+exec ${PKG_HOME}/sbin/php-fpm -F 2>&1
