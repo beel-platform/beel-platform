@@ -23,12 +23,11 @@ hostnamelookups = "Off"
 #mpm settings
 [mpm]
 type = "prefork"
-startservers = 16
-minspareservers = 16
-maxspareservers = 32
-serverlimit = 256
-maxrequestworkers = 256
-maxconnectionsperchild = 10_000
+startservers = 5
+minspareservers = 5
+maxspareservers = 10
+maxrequestworkers = 250
+maxconnectionsperchild = 0
 #define these if the mpm is threaded like mpm_event or mpm_worker
 threaded = false
 threadsperchild = 64
