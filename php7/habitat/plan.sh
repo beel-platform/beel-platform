@@ -1,7 +1,7 @@
 pkg_origin=bbh
 pkg_name=php7
 pkg_distname=php
-pkg_version=7.1.1
+pkg_version=7.1.2
 pkg_maintainer="Basilio Briceno <bbh@briceno.mx>"
 pkg_license=('PHP-3.01')
 pkg_upstream_url=http://php.net/
@@ -9,9 +9,9 @@ pkg_description="PHP is a popular general-purpose scripting language that is esp
 pkg_source=https://php.net/get/${pkg_distname}-${pkg_version}.tar.bz2/from/this/mirror
 pkg_filename=${pkg_distname}-${pkg_version}.tar.bz2
 pkg_dirname=${pkg_distname}-${pkg_version}
-pkg_shasum=d791d39d7b54ec42441a05a5f06d68a495647d843210e3ae4f2c6adb99c675bc
-pkg_deps=(core/libxml2 core/curl core/libpng core/libjpeg-turbo core/zlib core/openssl)
-pkg_build_deps=(core/bison2 core/gcc core/make core/re2c core/m4 core/pkg-config)
+pkg_shasum=e0f2214e2366434ee231156ba70cfefd0c59790f050d8727a3f1dc2affa67004
+pkg_deps=(core/libxml2 core/curl core/libpng core/libjpeg-turbo core/zlib core/openssl core/perl)
+pkg_build_deps=(core/bison2 core/gcc core/make core/re2c core/m4 core/pkg-config bbh/httpd)
 pkg_sbin_dirs=(sbin)
 pkg_bin_dirs=(bin)
 pkg_lib_dirs=(lib)
@@ -23,27 +23,28 @@ pkg_svc_group=root
 
 do_prepare() {
   if [[ ! -r /usr/bin/xml2-config ]]; then
-    ln -sv "$(pkg_path_for libxml2)/bin/xml2-config" /usr/bin/xml2-config
+    ln -sv "$(pkg_path_for core/libxml2)/bin/xml2-config" /usr/bin/xml2-config
     _clean_xml2=true
   fi
   if [[ ! -r /usr/include/openssl/evp.h ]]; then
-    ln -sv "$(pkg_path_for openssl)/include/openssl/evp.h" /usr/include/openssl/evp.h
+    mkdir -p /usr/include/openssl
+    ln -sv "$(pkg_path_for core/openssl)/include/openssl/evp.h" /usr/include/openssl/evp.h
     _clean_openssl=true
   fi
   if [[ ! -r /usr/include/curl/easy.h ]]; then
-    ln -sv "$(pkg_path_for curl)/include/curl" /usr/include/curl
+    ln -sv "$(pkg_path_for core/curl)/include/curl" /usr/include/curl
     _clean_curl=true
   fi
   if [[ ! -r /usr/include/jpeglib.h ]]; then
-    ln -sv "$(pkg_path_for libjpeg-turbo)/include/jpeglib.h" /usr/include/jpeglib.h
+    ln -sv "$(pkg_path_for core/libjpeg-turbo)/include/jpeglib.h" /usr/include/jpeglib.h
     _clean_libjpeg=true
   fi
   if [[ ! -r /usr/include/png.h ]]; then
-    ln -sv "$(pkg_path_for libpng)/include/png.h" /usr/include/png.h
+    ln -sv "$(pkg_path_for core/libpng)/include/png.h" /usr/include/png.h
     _clean_libpng=true
   fi
   if [[ ! -r /usr/include/zlib.h ]]; then
-    ln -sv "$(pkg_path_for zlib)/include/zlib.h" /usr/include/zlib.h
+    ln -sv "$(pkg_path_for core/zlib)/include/zlib.h" /usr/include/zlib.h
     _clean_zlib=true
   fi
 }
@@ -58,16 +59,17 @@ do_build ()
     --sysconfdir="${pkg_svc_config_path}/etc" \
     --with-config-file-path="${pkg_svc_config_path}" \
     --enable-fpm \
-    --with-mysql=mysqlnd \
-    --with-mysqli=mysqlnd \
-    --with-pdo-mysql=mysqlnd \
+    --enable-embedded-mysqli \
+    --enable-mysqlnd \
+    --with-pdo-mysql \
     --enable-opcache \
     --without-pear \
     --with-gd \
     --with-curl \
     --with-jpeg-dir \
     --with-zlib-dir \
-    --with-openssl
+    --with-openssl \
+    --with-apxs2="$(pkg_path_for bbh/httpd)/bin/apxs"
   make -j4
 }
 
