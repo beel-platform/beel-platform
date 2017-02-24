@@ -44,5 +44,8 @@ do_install ()
   if [ -e ${PLAN_CONTEXT}/../files/libphp7.so ]; then
     cp -vr ${PLAN_CONTEXT}/../files/libphp7.so $pkg_prefix/modules/
   fi
+  if [ -e ${PLAN_CONTEXT}/../files/libphp5.so ]; then
+    cp -vr ${PLAN_CONTEXT}/../files/libphp5.so $pkg_prefix/modules/
+  fi
   cp -rv ${PLAN_CONTEXT}/../source/* ${pkg_prefix}/htdocs/
 }
