@@ -10,7 +10,7 @@ pkg_source=https://php.net/get/${pkg_distname}-${pkg_version}.tar.bz2/from/this/
 pkg_filename=${pkg_distname}-${pkg_version}.tar.bz2
 pkg_dirname=${pkg_distname}-${pkg_version}
 pkg_shasum=e0f2214e2366434ee231156ba70cfefd0c59790f050d8727a3f1dc2affa67004
-pkg_deps=(core/libxml2 core/curl core/libpng core/libjpeg-turbo core/zlib core/openssl core/perl)
+pkg_deps=(core/libxml2 core/curl core/libpng core/libjpeg-turbo core/zlib core/openssl)
 pkg_build_deps=(core/bison2 core/gcc core/make core/re2c core/m4 core/pkg-config bbh/httpd)
 pkg_sbin_dirs=(sbin)
 pkg_bin_dirs=(bin)
@@ -21,7 +21,8 @@ pkg_expose=(8080)
 pkg_svc_user=root
 pkg_svc_group=root
 
-do_prepare() {
+do_prepare ()
+{
   if [[ ! -r /usr/bin/xml2-config ]]; then
     ln -sv "$(pkg_path_for core/libxml2)/bin/xml2-config" /usr/bin/xml2-config
     _clean_xml2=true
@@ -78,12 +79,12 @@ do_install ()
   make install
 }
 
-do_check()
+do_check ()
 {
   make -j4 test
 }
 
-do_end()
+do_end ()
 {
   if [[ -n "$_clean_xml2" ]]; then
     rm -fv /usr/bin/xml2-config
