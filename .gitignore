@@ -1,3 +1,4 @@
 .git
-php5/results
-nginx/results
+*/results
+.vagrant
+vm
