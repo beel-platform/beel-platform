@@ -10,8 +10,8 @@ pkg_source=https://php.net/get/${pkg_distname}-${pkg_version}.tar.bz2/from/this/
 pkg_filename=${pkg_distname}-${pkg_version}.tar.bz2
 pkg_dirname=${pkg_distname}-${pkg_version}
 pkg_shasum=a105c293fa1dbff118b5b0ca74029e6c461f8c78f49b337a2a98be9e32c27906
-pkg_deps=(core/libxml2 core/openssl core/curl core/libpng core/libjpeg-turbo core/zlib)
-pkg_build_deps=(core/bison2 core/gcc core/make core/re2c)
+pkg_deps=(core/libxml2 core/curl core/libpng core/libjpeg-turbo core/zlib core/openssl)
+pkg_build_deps=(core/bison2 core/gcc core/make core/re2c core/m4 core/pkg-config bbh/httpd)
 pkg_sbin_dirs=(sbin)
 pkg_bin_dirs=(bin)
 pkg_lib_dirs=(lib)
@@ -21,18 +21,17 @@ pkg_expose=(8080)
 pkg_svc_user=root
 pkg_svc_group=root
 
-do_prepare() {
-  # The configure script expects binaries to either be in `/usr/bin`, `/usr/local/bin` or be
-  # passed in as a configure param. Instead of overriding the entire do_build, symlink the
-  # required executable into place.
+do_prepare ()
+{
   if [[ ! -r /usr/bin/xml2-config ]]; then
     ln -sv "$(pkg_path_for libxml2)/bin/xml2-config" /usr/bin/xml2-config
     _clean_xml2=true
   fi
-  # if [[ ! -r /usr/include/openssl/evp.h ]]; then
-  #   ln -sv "$(pkg_path_for openssl)/include/openssl" /usr/include/openssl
-  #   _clean_openssl=true
-  # fi
+  if [[ ! -r /usr/include/openssl/evp.h ]]; then
+    mkdir -p /usr/include/openssl
+    ln -sv "$(pkg_path_for core/openssl)/include/openssl/evp.h" /usr/include/openssl/evp.h
+    _clean_openssl=true
+  fi
   if [[ ! -r /usr/include/curl/easy.h ]]; then
     ln -sv "$(pkg_path_for curl)/include/curl" /usr/include/curl
     _clean_curl=true
@@ -71,8 +70,9 @@ do_build ()
     --with-gd \
     --with-curl \
     --with-jpeg-dir \
-    --with-zlib-dir
-    # --with-openssl=/usr
+    --with-zlib-dir \
+    --with-openssl-dir \
+    --with-apxs2="$(pkg_path_for bbh/httpd)/bin/apxs"
   make -j4
 }
 
@@ -81,20 +81,19 @@ do_install ()
   make install
 }
 
-do_check()
+do_check ()
 {
   make -j4 test
 }
 
-do_end()
+do_end ()
 {
-  # Clean up the `xml2-config` link, if we set it up.
   if [[ -n "$_clean_xml2" ]]; then
     rm -fv /usr/bin/xml2-config
   fi
-  # if [[ -n "$_clean_openssl" ]]; then
-  #   rm -frv /usr/include/openssl
-  # fi
+  if [[ -n "$_clean_openssl" ]]; then
+    rm -frv /usr/include/openssl
+  fi
   if [[ -n "$_clean_curl" ]]; then
     rm -frv /usr/include/curl
   fi
