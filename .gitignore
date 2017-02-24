@@ -2,3 +2,4 @@
 hab/*/results
 .vagrant
 vm
+hab/httpd/files
