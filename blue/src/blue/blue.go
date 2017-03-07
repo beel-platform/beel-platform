@@ -13,15 +13,15 @@ func msg_error(error_message string) {
 
 func load_config() {
   // Declare variables
-  var toml_location string = "blue.toml"
-  var repository string = ""
   var project interface{}
+  var repository string = ""
+  var toml_location string = "blue.toml"
   // Validate TOML file location
   if _, err := os.Stat(toml_location); os.IsNotExist(err) {
     msg_error("TOML file not found")
   }
-  // Load TOML
-  tree, err := toml.LoadFile("blue.toml")
+  // Load TOML content
+  tree, err := toml.LoadFile(toml_location)
   if err != nil {
     fmt.Println("ERROR ", err.Error())
   } else {
@@ -34,7 +34,7 @@ func load_config() {
     if !config.Has("repo") {
       msg_error("[CONFIG] Repository path it's required")
     }
-    repository = config.Get("repo").(string)
+    repository := config.Get("repo").(string)
     if _, err := os.Stat(repository); os.IsNotExist(err) {
       msg_error("[CONFIG] Repository path not found")
     }
