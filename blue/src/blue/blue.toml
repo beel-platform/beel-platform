@@ -1,3 +1,18 @@
-[blue]
-name = "My project's name"
-repo = "/Users/bbh/Projects"
+[project]
+name = "My Project"
+version = "0.1"
+repo = "/Users/bbh/Projects/blue/test"
+dump = "/Users/bbh/Projects/blue/test"
+
+[stack]
+name = "a22p7m57"
+packages = (
+  "bluespark/apache22"
+  "bluespark/php7",
+  "bluespark/mysql"
+)
+
+[services]
+habitat_depot = ""
+docker_registry = ""
+nexus_repository = ""
