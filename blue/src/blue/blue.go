@@ -23,33 +23,40 @@ func load_config() {
   if err != nil {
     fmt.Println("[TOML ERROR]", err.Error())
   } else {
-    // Validate blue group
-    if !tree.Has("blue") {
-      msg_error("[CONFIG] Group blue it's required")
+    // Validate group project
+    if !tree.Has("project") {
+      msg_error("[CONFIG] Project group it's required")
     }
-    config := tree.Get("blue").(*toml.TomlTree)
-    // Validate repository
-    if !config.Has("repo") {
-      msg_error("[CONFIG] Repository path it's required")
+    g_project := tree.Get("project").(*toml.TomlTree)
+    // Validate repository location
+    if !g_project.Has("location") {
+      msg_error("[CONFIG] Project's code location it's required")
     }
-    repository := config.Get("repo").(string)
-    if _, err := os.Stat(repository); os.IsNotExist(err) {
-      msg_error("[CONFIG] Repository path not found")
+    location := g_project.Get("location").(string)
+    if _, err := os.Stat(location); os.IsNotExist(err) {
+      msg_error("[CONFIG] Project's code location not found")
     }
-    // Validate SQL dump
-    if !config.Has("dump") {
-      msg_error("[CONFIG] SQL dump path it's required")
-    }
-    sqldump := config.Get("dump").(string)
-    if _, err := os.Stat(sqldump); os.IsNotExist(err) {
-      msg_error("[CONFIG] SQL dump path not found")
+    // Validate schemas
+    if tree.Has("schema") {
+      schemas := tree.Get("schema").(*toml.TomlTree)
+      for _, schema_key := range schemas.Keys() {
+        schema := schemas.Get(schema_key).(*toml.TomlTree)
+        fmt.Println(schema.Get("hostname"))
+        // Validate SQL dump
+        if schema.Has("sql_dump") {
+          sqldump := schema.Get("sql_dump").(string)
+          if _, err := os.Stat(sqldump); os.IsNotExist(err) {
+            msg_error("[CONFIG] SQL dump not found")
+          }
+        }
+      }
     }
 
     // Print out test result
-    if config.Has("name") {
-      project = config.Get("name").(string)
+    if g_project.Has("name") {
+      project = g_project.Get("name").(string)
     }
-    fmt.Println("The repo path for project:", project, "is", repository)
+    fmt.Println("The repo path for project:", project, "is", location)
   }
 }
 
