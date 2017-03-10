@@ -1,7 +1,7 @@
 [project]
 name = "My Project"
 version = "0.1.0"
-# Project's location (code)
+# Project's code
 location = "/Users/bbh/Projects/demo/blue/test"
 
 [schema.default]
@@ -24,12 +24,11 @@ username = "drupal_bar"
 password = "drupal_bar"
 
 [stack]
-name = "a22p7m57"
-# packages = (
-#   "bluespark/apache22"
-#   "bluespark/php7",
-#   "bluespark/mysql"
-# )
+packages = [
+  "bluespark/mysql",
+  "bluespark/apache22",
+  "bluespark/php7"
+]
 
 [services]
 habitat_depot = ""
