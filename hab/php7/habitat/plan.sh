@@ -1,8 +1,8 @@
-pkg_origin=bbh
 pkg_name=php7
+pkg_origin=bluespark
 pkg_distname=php
 pkg_version=7.1.2
-pkg_maintainer="Basilio Briceno <bbh@briceno.mx>"
+pkg_maintainer="Basilio Briceno <basilio@bluespark.com>"
 pkg_license=('PHP-3.01')
 pkg_upstream_url=http://php.net/
 pkg_description="PHP is a popular general-purpose scripting language that is especially suited to web development."

@@ -1,9 +1,9 @@
 pkg_name=httpd
-pkg_origin=bbh
+pkg_origin=bluespark
 pkg_version=2.4.25
 pkg_description="The Apache HTTP Server"
 pkg_upstream_url="http://httpd.apache.org/"
-pkg_maintainer="Basilio Briceno <bbh@briceno.mx>"
+pkg_maintainer="Basilio Briceno <basilio@bluespark.com>"
 pkg_license=('Apache-2.0')
 pkg_source="https://archive.apache.org/dist/${pkg_name}/${pkg_name}-${pkg_version}.tar.gz"
 pkg_shasum=be6c5eb805216ec205453bb02b1990c82609cb1b145bcb69dc6e99fff45493a9
