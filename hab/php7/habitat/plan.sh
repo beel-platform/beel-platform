@@ -11,7 +11,7 @@ pkg_filename=${pkg_distname}-${pkg_version}.tar.bz2
 pkg_dirname=${pkg_distname}-${pkg_version}
 pkg_shasum=e0f2214e2366434ee231156ba70cfefd0c59790f050d8727a3f1dc2affa67004
 pkg_deps=(core/libxml2 core/curl core/libpng core/libjpeg-turbo core/zlib core/openssl)
-pkg_build_deps=(core/bison2 core/gcc core/make core/re2c core/m4 core/pkg-config bbh/httpd)
+pkg_build_deps=(core/bison2 core/gcc core/make core/re2c core/m4 core/pkg-config bluespark/httpd)
 pkg_sbin_dirs=(sbin)
 pkg_bin_dirs=(bin)
 pkg_lib_dirs=(lib)
@@ -70,8 +70,8 @@ do_build ()
     --with-jpeg-dir \
     --with-zlib-dir \
     --with-openssl \
-    --with-apxs2="$(pkg_path_for bbh/httpd)/bin/apxs"
-  make -j4
+    --with-apxs2="$(pkg_path_for bluespark/httpd)/bin/apxs"
+  make
 }
 
 do_install ()
@@ -81,7 +81,7 @@ do_install ()
 
 do_check ()
 {
-  make -j4 test
+  make test
 }
 
 do_end ()

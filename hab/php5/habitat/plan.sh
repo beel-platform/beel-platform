@@ -73,7 +73,7 @@ do_build ()
     --with-zlib-dir \
     --with-openssl-dir \
     --with-apxs2="$(pkg_path_for bluespark/httpd)/bin/apxs"
-  make -j4
+  make
 }
 
 do_install ()
@@ -83,7 +83,7 @@ do_install ()
 
 do_check ()
 {
-  make -j4 test
+  make test
 }
 
 do_end ()
