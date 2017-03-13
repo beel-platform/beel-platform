@@ -72,7 +72,7 @@ do_build ()
     --with-jpeg-dir \
     --with-zlib-dir \
     --with-openssl-dir \
-    --with-apxs2="$(pkg_path_for bbh/httpd)/bin/apxs"
+    --with-apxs2="$(pkg_path_for bluespark/httpd)/bin/apxs"
   make -j4
 }
 
