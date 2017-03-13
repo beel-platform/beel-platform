@@ -1,8 +1,8 @@
-pkg_origin=bbh
 pkg_name=nginx
+pkg_origin=bluespark
 pkg_version=1.11.9
 pkg_description="NGINX web server."
-pkg_maintainer="Basilio Briceno <bbh@briceno.mx>"
+pkg_maintainer="Basilio Briceno <basilio@bluespark.com>"
 pkg_license=('bsd')
 pkg_source=https://nginx.org/download/nginx-${pkg_version}.tar.gz
 pkg_upstream_url=https://nginx.org/
@@ -53,7 +53,7 @@ do_build ()
     --with-http_secure_link_module \
     --with-http_sub_module \
     --with-http_slice_module
-  make -j4
+  make
   mkdir -p ${pkg_prefix}/www
   cp -rv ${PLAN_CONTEXT}/../source/* ${pkg_prefix}/www
 }
