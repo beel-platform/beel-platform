@@ -1,7 +1,7 @@
 pkg_name=mysql
-pkg_origin=core
+pkg_origin=bluespark
 pkg_version=5.7.17
-pkg_maintainer='The Habitat Maintainers <humans@habitat.sh>'
+pkg_maintainer='Basilio Briceño <basilio@bluespark.com>'
 pkg_license=('GPL-2.0')
 pkg_source=http://dev.mysql.com/get/Downloads/MySQL-5.7/${pkg_name}-${pkg_version}.tar.gz
 pkg_shasum=cebf23e858aee11e354c57d30de7a079754bdc2ef85eb684782458332a4b9651
