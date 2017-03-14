@@ -1,17 +1,18 @@
 package main
 
 import (
-  "fmt"
+  "io"
   "os"
-  "github.com/pelletier/go-toml"
+  "fmt"
+  "regexp"
   "strconv"
+  "strings"
   "reflect"
   "net/http"
-  "io"
-  "regexp"
-  "strings"
-  // "archive/tar"
-  // "compress/gzip"
+  "archive/tar"
+  "path/filepath"
+  "compress/gzip"
+  "github.com/pelletier/go-toml"
 )
 
 func msg_error(message string) {
@@ -58,29 +59,114 @@ func get_home() string {
   return home
 }
 
+func overwrite(file_path string) (*os.File, error) {
+  f, err := os.OpenFile(file_path, os.O_RDWR|os.O_TRUNC, 0777)
+  if err != nil {
+    f, err = os.Create(file_path)
+    if err != nil {
+      return f, err
+    }
+  }
+  return f, nil
+}
+
+func read(file_path string) (*os.File, error) {
+  f, err := os.OpenFile(file_path, os.O_RDONLY, 0444)
+  if err != nil {
+    return f, err
+  }
+  return f, nil
+}
+
+func untar(tar_path string, dest_path string) {
+  fr, err := read(tar_path)
+  defer fr.Close()
+  if err != nil {
+    panic(err)
+  }
+  gr, err := gzip.NewReader(fr)
+  defer gr.Close()
+  if err != nil {
+    panic(err)
+  }
+  tr := tar.NewReader(gr)
+  for {
+    hdr, err := tr.Next()
+    if err == io.EOF {
+      // end of tar archive
+      break
+    }
+    if err != nil {
+      panic(err)
+    }
+    path := dest_path+"/"+hdr.Name
+    switch hdr.Typeflag {
+    case tar.TypeDir:
+      if err := os.MkdirAll(path, os.FileMode(hdr.Mode)); err != nil {
+        panic(err)
+      }
+    case tar.TypeReg:
+      ow, err := overwrite(path)
+      defer ow.Close()
+      if err != nil {
+        panic(err)
+      }
+      if _, err := io.Copy(ow, tr); err != nil {
+        panic(err)
+      }
+    default:
+      fmt.Printf("Can't: %c, %s\n", hdr.Typeflag, path)
+    }
+  }
+}
+
 func hab_install(tree *toml.TomlTree) {
   if !tree.Has("habitat.bin_path") {
     msg_error("[CONF] Group habitat it's required")
   }
   location := tree.Get("habitat.bin_path").(string)
   if _, err := os.Stat(location); os.IsNotExist(err) {
-    // Install habitat
+    // Download habitat
     if !tree.Has("habitat.download_url") {
       msg_error("[CONF] Habitat download URL it's required")
     }
     download_url := tree.Get("habitat.download_url").(string)
-    hab_path := get_home()+"/"+location
-    hab_bin := hab_path+"/bin"
-    hab_tmp := hab_path+"/tmp"
+    hab_path := filepath.Join(get_home(), "/", location)
+    hab_bin := filepath.Join(hab_path, "/bin")
+    hab_tmp := filepath.Join(hab_path, "/tmp")
     if _, err := os.Stat(hab_bin); os.IsNotExist(err) {
-      os.MkdirAll(hab_bin,0755)
+      os.MkdirAll(hab_bin, 0755)
     }
     if _, err := os.Stat(hab_tmp); os.IsNotExist(err) {
-      os.MkdirAll(hab_tmp,0755)
+      os.MkdirAll(hab_tmp, 0755)
     }
-    if _, err := os.Stat(hab_tmp+"/hab.tgz"); os.IsNotExist(err) {
-      msg_info("Downloading habitat at: "+hab_tmp)
-      download_file(hab_tmp+"/hab.tgz", download_url)
+    tar_path := filepath.Join(hab_tmp, "/habitat.tar.gz")
+    if _, err := os.Stat(tar_path); os.IsNotExist(err) {
+      msg_info("Downloading habitat")
+      download_file(tar_path, download_url)
+    }
+    // Decompress habitat's tarball
+    msg_info("Decompressig habitat")
+    untar(tar_path, hab_tmp)
+    if err := os.Remove(tar_path); err != nil {
+      msg_info("Cannot remove "+tar_path)
+      fmt.Println(err)
+    }
+    // Move, change permissions and delete temporal
+    if tmp_dir,err := filepath.Glob(filepath.Join(hab_tmp, "/hab-*")); err != nil {
+      fmt.Println(err)
+    } else {
+      msg_info("Installing habitat")
+      if err := os.Rename(filepath.Join(tmp_dir[0],"/hab"), filepath.Join(hab_bin,"/hab")); err != nil {
+        msg_error("Cannot move habitat binary to "+hab_bin)
+      }
+      if err := os.Chmod(filepath.Join(hab_bin,"/hab"),0755); err != nil {
+        msg_error("Cannot change habitat's permissions")
+      }
+      if err := os.Remove(tmp_dir[0]); err != nil {
+        msg_info("Cannot remove temporal directory "+tmp_dir[0])
+        fmt.Println(err)
+      }
     }
   }
 }
