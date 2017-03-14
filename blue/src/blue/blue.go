@@ -8,6 +8,10 @@ import (
   "reflect"
   "net/http"
   "io"
+  "regexp"
+  "strings"
+  // "archive/tar"
+  // "compress/gzip"
 )
 
 func msg_error(message string) {
@@ -40,20 +44,44 @@ func download_file(filepath string, url string) (err error) {
   return nil
 }
 
+func get_home() string {
+  var home string
+  for _, env_var := range os.Environ() {
+    match, err := regexp.MatchString("HOME=(.*)", env_var)
+    if (err != nil) {
+      msg_error("Cannot determine environment variable HOME")
+    } else if match {
+      home = strings.Split(env_var,"=")[1]
+      break
+    }
+  }
+  return home
+}
+
 func hab_install(tree *toml.TomlTree) {
-  if !tree.Has("habitat.location") {
+  if !tree.Has("habitat.bin_path") {
     msg_error("[CONF] Group habitat it's required")
   }
-  location := tree.Get("habitat.location").(string)
+  location := tree.Get("habitat.bin_path").(string)
   if _, err := os.Stat(location); os.IsNotExist(err) {
-    msg_info("Installing habitat at: "+location)
     // Install habitat
     if !tree.Has("habitat.download_url") {
       msg_error("[CONF] Habitat download URL it's required")
     }
     download_url := tree.Get("habitat.download_url").(string)
-    os.MkdirAll(location,0755)
-    download_file(location, download_url )
+    hab_path := get_home()+"/"+location
+    hab_bin := hab_path+"/bin"
+    hab_tmp := hab_path+"/tmp"
+    if _, err := os.Stat(hab_bin); os.IsNotExist(err) {
+      os.MkdirAll(hab_bin,0755)
+    }
+    if _, err := os.Stat(hab_tmp); os.IsNotExist(err) {
+      os.MkdirAll(hab_tmp,0755)
+    }
+    if _, err := os.Stat(hab_tmp+"/hab.tgz"); os.IsNotExist(err) {
+      msg_info("Downloading habitat at: "+hab_tmp)
+      download_file(hab_tmp+"/hab.tgz", download_url)
+    }
   }
 }
 
@@ -113,8 +141,9 @@ func load_config() {
     pres,_ := tree.Query("$.stack.packages[0:-1]")
     items := len(pres.Values())+1 // Workaround to get all the nodes
     results,_ := tree.Query("$.stack.packages[0:"+strconv.Itoa(items)+"]")
-    // Validate habitat install
+    // Validate habitat and install
     hab_install(tree)
+    // Iterate packages
     for _,item := range results.Values() {
       fmt.Println(item)
     }
