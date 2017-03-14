@@ -6,6 +6,8 @@ import (
   "github.com/pelletier/go-toml"
   "strconv"
   "reflect"
+  "net/http"
+  "io"
 )
 
 func msg_error(message string) {
@@ -15,6 +17,44 @@ func msg_error(message string) {
 
 func msg_info(message string) {
   fmt.Println("[INFO]", message)
+}
+
+func download_file(filepath string, url string) (err error) {
+  // Create the file
+  out, err := os.Create(filepath)
+  if err != nil  {
+    return err
+  }
+  defer out.Close()
+  // Get the data
+  resp, err := http.Get(url)
+  if err != nil {
+    return err
+  }
+  defer resp.Body.Close()
+  // Writer the body to file
+  _, err = io.Copy(out, resp.Body)
+  if err != nil  {
+    return err
+  }
+  return nil
+}
+
+func hab_install(tree *toml.TomlTree) {
+  if !tree.Has("habitat.location") {
+    msg_error("[CONF] Group habitat it's required")
+  }
+  location := tree.Get("habitat.location").(string)
+  if _, err := os.Stat(location); os.IsNotExist(err) {
+    msg_info("Installing habitat at: "+location)
+    // Install habitat
+    if !tree.Has("habitat.download_url") {
+      msg_error("[CONF] Habitat download URL it's required")
+    }
+    download_url := tree.Get("habitat.download_url").(string)
+    os.MkdirAll(location,0755)
+    download_file(location, download_url )
+  }
 }
 
 func load_config() {
@@ -73,6 +113,8 @@ func load_config() {
     pres,_ := tree.Query("$.stack.packages[0:-1]")
     items := len(pres.Values())+1 // Workaround to get all the nodes
     results,_ := tree.Query("$.stack.packages[0:"+strconv.Itoa(items)+"]")
+    // Validate habitat install
+    hab_install(tree)
     for _,item := range results.Values() {
       fmt.Println(item)
     }

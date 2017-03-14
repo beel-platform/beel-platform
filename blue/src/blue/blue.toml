@@ -34,3 +34,7 @@ packages = [
 habitat_depot = ""
 docker_registry = ""
 nexus_repository = ""
+
+[habitat]
+location = "~/.bsp/bin/hab"
+download_url = "https://api.bintray.com/content/habitat/stable/linux/x86_64/hab-%24latest-x86_64-linux.tar.gz?bt_package=hab-x86_64-linux"
