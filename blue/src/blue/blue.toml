@@ -1,11 +1,10 @@
 [project]
-name = "My Project"
+name = "myproject"
 version = "0.1.0"
-# Project's code
-location = "/Users/bbh/Projects/demo/blue/test"
+path = "~/Projects/demo/blue/project1" # Project's location
 
 [schema.default]
-sql_dump = "/Users/bbh/Projects/demo/blue/test/default.sql"
+sql_dump = "default.sql" # It's based on location
 hostname = "localhost"
 database = "drupal_default"
 username = "drupal_default"
@@ -26,9 +25,10 @@ password = "drupal_bar"
 [stack]
 packages = [
   "bluespark/mysql",
-  "bluespark/apache22",
+  "bluespark/httpd",
   "bluespark/php7"
 ]
+container = "local-myproject-0.1.0"
 
 [services]
 habitat_depot = ""
@@ -36,5 +36,6 @@ docker_registry = ""
 nexus_repository = ""
 
 [habitat]
-bin_path = ".bsp"
-download_url = "https://api.bintray.com/content/habitat/stable/linux/x86_64/hab-%24latest-x86_64-linux.tar.gz?bt_package=hab-x86_64-linux"
+bsp_path = ".bsp"
+download_url_macos = "https://api.bintray.com/content/habitat/stable/darwin/x86_64/hab-%24latest-x86_64-darwin.zip?bt_package=hab-x86_64-darwin"
+download_url_linux = "https://api.bintray.com/content/habitat/stable/linux/x86_64/hab-%24latest-x86_64-linux.tar.gz?bt_package=hab-x86_64-linux"
