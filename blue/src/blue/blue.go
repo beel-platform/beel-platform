@@ -29,16 +29,16 @@ func msg_info(message string) {
 func download_file(filepath string, url string) (err error) {
   // Create the file
   out, err := os.Create(filepath)
+  defer out.Close()
   if err != nil  {
     return err
   }
-  defer out.Close()
   // Get the data
   resp, err := http.Get(url)
+  defer resp.Body.Close()
   if err != nil {
     return err
   }
-  defer resp.Body.Close()
   // Writer the body to file
   _, err = io.Copy(out, resp.Body)
   if err != nil  {
