@@ -3,9 +3,12 @@ package main
 import (
   "os"
   "fmt"
+  // "bytes"
+  "syscall"
   "runtime"
   "strconv"
   "reflect"
+  "os/exec"
   "path/filepath"
   "github.com/pelletier/go-toml"
 )
@@ -85,6 +88,27 @@ func hab_install(tree *toml.TomlTree) string {
   return filepath.Join(bsp_path, "/bin/hab")
 }
 
+func hab_pkg_install(hab_pkg string, hab_bin string) {
+  msg_info("Installing habitat package: "+hab_pkg)
+  // Prepare command
+  cmd := exec.Command("/usr/bin/sudo", hab_bin, "pkg", "install", hab_pkg)
+  // Execute command
+  printCommand(cmd)
+  var waitStatus syscall.WaitStatus
+  if err := cmd.Run(); err != nil {
+    printError(err)
+    // Did the command fail because of an unsuccessful exit code
+    if exitError, ok := err.(*exec.ExitError); ok {
+      waitStatus = exitError.Sys().(syscall.WaitStatus)
+      printOutput([]byte(fmt.Sprintf("%d", waitStatus.ExitStatus())))
+    }
+  } else {
+    // Command was successful
+    waitStatus = cmd.ProcessState.Sys().(syscall.WaitStatus)
+    printOutput([]byte(fmt.Sprintf("%d", waitStatus.ExitStatus())))
+  }
+}
+
 func load_config() {
   var toml_location string = "blue.toml"
   // Validate and Load TOML file
@@ -143,10 +167,9 @@ func load_config() {
     results,_ := tree.Query("$.stack.packages[0:"+strconv.Itoa(items)+"]")
     // Validate habitat and install
     hab_bin := hab_install(tree)
-    fmt.Println(hab_bin)
     // Iterate packages
-    for _,item := range results.Values() {
-      fmt.Println(item)
+    for _,hab_pkg := range results.Values() {
+      hab_pkg_install(hab_pkg.(string), hab_bin)
     }
   }
 }
