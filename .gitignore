@@ -3,3 +3,6 @@ hab/*/results
 .vagrant
 vm
 hab/httpd/files
+blue/project1
+blue/src/blue/blue
+blue/src/github.com
