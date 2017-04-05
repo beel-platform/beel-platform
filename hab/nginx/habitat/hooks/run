@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PKG_HOME=$(hab pkg path bbh/nginx)
+PKG_HOME=$(hab pkg path bluespark/nginx)
 
 directory ()
 {
