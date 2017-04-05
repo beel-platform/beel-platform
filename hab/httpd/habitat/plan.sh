@@ -35,7 +35,7 @@ do_build ()
     --enable-mods-shared="reallyall" \
     --enable-mpms-shared="prefork event worker" \
     --enable-so
-  make -j4
+  make
 }
 
 do_install ()
