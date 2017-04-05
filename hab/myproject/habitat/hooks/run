@@ -1,0 +1,5 @@
+#!/bin/bash
+
+exec 2>&1
+
+$(hab pkg path bluespark/httpd)/bin/httpd -DFOREGROUND -f /hab/svc/httpd/config/httpd.conf
