@@ -50,4 +50,4 @@ deny = "All"
 allow = "None"
 
 [php]
-version = 5
+version = 7
