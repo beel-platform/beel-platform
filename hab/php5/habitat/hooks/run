@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PKG_HOME=$(hab pkg path bbh/php5)
+PKG_HOME=$(hab pkg path bluespark/php5)
 
 symlink ()
 {
