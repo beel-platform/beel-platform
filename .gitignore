@@ -1,8 +1,9 @@
 .git
-hab/*/results
 .vagrant
 vm
-hab/httpd/files
+chef
+hab/*/results
+hab/*/files
 blue/project1
 blue/src/blue/blue
 blue/src/github.com
