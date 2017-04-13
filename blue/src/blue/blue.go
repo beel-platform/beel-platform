@@ -3,7 +3,6 @@ package main
 import (
   "os"
   "fmt"
-  // "bytes"
   "syscall"
   "runtime"
   "strconv"
@@ -132,8 +131,8 @@ func load_config() {
       msg_error("[CONF] Directory "+ location +" not found")
     }
     // Validate schemas
-    if tree.Has("schema") {
-      schemas := tree.Get("schema").(*toml.TomlTree)
+    if tree.Has("database") {
+      schemas := tree.Get("database").(*toml.TomlTree)
       for _, schema_key := range schemas.Keys() {
         schema := schemas.Get(schema_key).(*toml.TomlTree)
         // Validate SQL dump
@@ -148,23 +147,22 @@ func load_config() {
         }
       }
     }
-    // Validate stack
-    if !tree.Has("stack") {
+    // Validate habitat packages
+    if !tree.Has("habitat") {
       msg_error("[CONF] Group stack it's required")
     }
-    // Validate packages
     // TODO Validate if array it's empty
-    if !tree.Has("stack.packages") {
+    if !tree.Has("habitat.packages") {
       msg_error("[CONF] Stack's packages required")
     }
-    rt := reflect.TypeOf(tree.Get("stack.packages"))
+    rt := reflect.TypeOf(tree.Get("habitat.packages"))
     if rt.Kind() != reflect.Slice {
-      msg_error("[CONF] Stack's packages attribute should be an array")
+      msg_error("[CONF] Habitat packages must be an array")
     }
     // Load primary results to add extra slice (workaround)
-    pres,_ := tree.Query("$.stack.packages[0:-1]")
+    pres,_ := tree.Query("$.habitat.packages[0:-1]")
     items := len(pres.Values())+1 // Workaround to get all the nodes
-    results,_ := tree.Query("$.stack.packages[0:"+strconv.Itoa(items)+"]")
+    results,_ := tree.Query("$.habitat.packages[0:"+strconv.Itoa(items)+"]")
     // Validate habitat and install
     hab_bin := hab_install(tree)
     // Iterate packages

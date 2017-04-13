@@ -1,41 +1,43 @@
+# General
 [project]
 name = "myproject"
 version = "0.1.0"
 path = "~/Projects/demo/blue/project1" # Project's location
 
-[schema.default]
+# Databases
+[database.default]
 sql_dump = "default.sql" # It's based on location
 hostname = "localhost"
 database = "drupal_default"
 username = "drupal_default"
 password = "drupal_default"
-[schema.foo]
+[database.foo]
 sql_dump = "/Users/bbh/Projects/demo/blue/test/foo.sql"
 hostname = "localhost"
 database = "drupal_foo"
 username = "drupal_foo"
 password = "drupal_foo"
-[schema.bar]
+[database.bar]
 sql_dump = "/Users/bbh/Projects/demo/blue/test/bar.sql"
 hostname = "localhost"
 database = "drupal_bar"
 username = "drupal_bar"
 password = "drupal_bar"
 
-[stack]
+[docker]
+image = "147905667315.dkr.ecr.us-east-1.amazonaws.com/bluespark:base-hab0.20.0-centos7"
+container = "local-myproject-0.1.0"
+
+[nexus]
+repository = ""
+
+[habitat]
 packages = [
   "bluespark/mysql",
   "bluespark/httpd",
   "bluespark/php7"
 ]
-container = "local-myproject-0.1.0"
-
-[services]
-habitat_depot = ""
-docker_registry = ""
-nexus_repository = ""
-
-[habitat]
+depot = ""
 bsp_path = ".bsp"
 download_url_macos = "https://api.bintray.com/content/habitat/stable/darwin/x86_64/hab-%24latest-x86_64-darwin.zip?bt_package=hab-x86_64-darwin"
 download_url_linux = "https://api.bintray.com/content/habitat/stable/linux/x86_64/hab-%24latest-x86_64-linux.tar.gz?bt_package=hab-x86_64-linux"
