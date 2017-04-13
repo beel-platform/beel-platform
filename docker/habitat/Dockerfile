@@ -1,6 +1,6 @@
 FROM bluespark/centos7
 
-LABEL name="Bluespark's centos7/habitat base image"
+LABEL name="Bluespark's (Habitat 0.20.0 / CentOS 7) base image"
 
 RUN wget -q https://api.bintray.com/content/habitat/stable/linux/x86_64/hab-%24latest-x86_64-linux.tar.gz?bt_package=hab-x86_64-linux -O hab-x86_64-linux.tar.gz
 RUN tar xfz hab-x86_64-linux.tar.gz
