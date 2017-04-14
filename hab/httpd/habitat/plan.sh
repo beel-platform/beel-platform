@@ -20,7 +20,6 @@ pkg_svc_group="root"
 
 do_build ()
 {
-  # --datadir=${pkg_svc_var_path} \
   ./configure --prefix="${pkg_prefix}" \
     --sysconfdir="${pkg_prefix}/etc" \
     --with-expat="$(pkg_path_for expat)" \
