@@ -1,5 +1,5 @@
 #httpd.conf settings
-serveradmin = "you@example.com"
+serveradmin = "you@bluespark.com"
 servername = "localhost"
 serverport = "80"
 listen = ["80"]
