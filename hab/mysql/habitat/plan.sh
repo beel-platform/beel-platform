@@ -44,6 +44,7 @@ pkg_svc_user="hab"
 pkg_bin_dirs=(bin)
 pkg_include_dirs=(include)
 pkg_lib_dirs=(lib)
+pkg_expose=(3306)
 
 do_build() {
   cmake . -DLOCAL_BOOST_DIR="$(pkg_path_for core/boost159)" \
