@@ -48,9 +48,9 @@ do_build ()
     --with-fpm-group=hab \
     --enable-mbstring \
     --enable-opcache \
-    --enable-embedded-mysqli \
     --enable-mysqlnd \
     --with-mysql=mysqlnd \
+    --with-mysqli=mysqlnd \
     --with-pdo-mysql=mysqlnd \
     --with-curl="$(pkg_path_for curl)" \
     --with-gd \
