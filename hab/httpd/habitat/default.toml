@@ -1,5 +1,5 @@
-#httpd.conf settings
-serveradmin = "you@bluespark.com"
+# httpd.conf settings
+serveradmin = "basilio@bluespark.com"
 servername = "localhost"
 serverport = "80"
 listen = ["80"]
@@ -9,7 +9,7 @@ default_modules = [	"access_compat", "alias", "auth_basic", "authn_file", "authn
                     "authz_groupfile", "authz_user", "autoindex", "dir", "env", "filter",
                     "headers", "log_config", "mime", "reqtimeout", "setenvif", "ssl", "status", "version" ]
 
-#httpd-default settings
+# httpd-default settings
 timeout = 60
 keepalive = "On"
 keepaliverequests = 100
@@ -20,7 +20,7 @@ accessfilename = ".htaccess"
 canonicalname = "Off"
 hostnamelookups = "Off"
 
-#mpm settings
+# mpm settings
 [mpm]
 type = "prefork"
 startservers = 5
@@ -28,26 +28,33 @@ minspareservers = 5
 maxspareservers = 10
 maxrequestworkers = 250
 maxconnectionsperchild = 0
-#define these if the mpm is threaded like mpm_event or mpm_worker
+# define these if the mpm is threaded like mpm_event or mpm_worker
 threaded = false
 threadsperchild = 64
 threadlimit = 192
 
-#mod_status
 [mod_status]
 allow = "127.0.0.1"
 extended = "Off"
 
-#mod_info
 [mod_info]
 allow = "127.0.0.1"
 
-#mod_proxy settings
 [mod_proxy]
 require = "All Denied"
 order = "Deny, Allow"
 deny = "All"
 allow = "None"
 
+# php settings
 [php]
 version = 7
+
+# bluespark's vhost settings
+[bsp]
+active = false
+documentroot = "/var/www/bsp"
+servername = "localhost"
+serveralias = "localhost"
+serveradmin = "basilio@bluespark.com"
+port = "80"
