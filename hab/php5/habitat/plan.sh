@@ -29,7 +29,7 @@ do_prepare ()
   fi
   if [[ ! -r /usr/include/openssl/evp.h ]]; then
     mkdir -p /usr/include/openssl
-    ln -sv "$(pkg_path_for core/openssl)/include/openssl/evp.h" /usr/include/openssl/evp.h
+    ln -sv "$(pkg_path_for openssl)/include/openssl/evp.h" /usr/include/openssl/evp.h
     _clean_openssl=true
   fi
   if [[ ! -r /usr/include/curl/easy.h ]]; then
