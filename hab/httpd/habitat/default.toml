@@ -52,7 +52,7 @@ version = 7
 
 # bluespark's vhost settings
 [bsp]
-active = false
+active = true
 documentroot = "/var/www/bsp"
 servername = "localhost"
 serveralias = "localhost"
