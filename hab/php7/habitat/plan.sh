@@ -1,7 +1,7 @@
 pkg_name=php7
 pkg_origin=bluespark
 pkg_distname=php
-pkg_version=7.1.4
+pkg_version=7.1.6
 pkg_maintainer="Basilio Briceno <basilio@bluespark.com>"
 pkg_license=('PHP-3.01')
 pkg_upstream_url=http://php.net/
@@ -9,7 +9,7 @@ pkg_description="PHP is a popular general-purpose scripting language that is esp
 pkg_source=https://php.net/get/${pkg_distname}-${pkg_version}.tar.bz2/from/this/mirror
 pkg_filename=${pkg_distname}-${pkg_version}.tar.bz2
 pkg_dirname=${pkg_distname}-${pkg_version}
-pkg_shasum=39bf697836e2760b3a44ea322e9e5f1f5b1f07abeb0111f6495eff7538e25805
+pkg_shasum=6e3576ca77672a18461a4b089c5790647f1b2c19f82e4f5e94c962609aabffcf
 pkg_deps=(
   core/coreutils
   core/curl
