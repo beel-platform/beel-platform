@@ -1,9 +1,11 @@
 .git
-.vagrant
-vm
+vm/tmp
+vm/.hab
+vm/.vagrant
 chef
 hab/*/results
 hab/*/files
 blue/project1
 blue/src/blue/blue
 blue/src/github.com
+hab/solr
