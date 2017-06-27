@@ -3,6 +3,7 @@ package main
 import (
   "os"
   "fmt"
+  "regexp"
   "syscall"
   "runtime"
   "strconv"
@@ -10,9 +11,10 @@ import (
   "os/exec"
   "path/filepath"
   "github.com/pelletier/go-toml"
+  "github.com/pelletier/go-toml/query"
 )
 
-func hab_install(tree *toml.TomlTree) string {
+func hab_install(tree *toml.Tree) string {
   // Validate bsp_path
   if !tree.Has("habitat.bsp_path") {
     msg_error("[CONF] Group habitat it's required")
@@ -108,20 +110,16 @@ func hab_pkg_install(hab_pkg string, hab_bin string) {
   }
 }
 
-func load_config() {
-  var toml_location string = "blue.toml"
-  // Validate and Load TOML file
-  if _, err := os.Stat(toml_location); os.IsNotExist(err) {
-    msg_error("TOML file not found")
-  }
-  if tree, err := toml.LoadFile(toml_location); err != nil {
+func load_config(toml_file string) {
+  // Load TOML tree
+  if tree, err := toml.LoadFile(toml_file); err != nil {
     msg_error(err.Error())
   } else {
     // Validate group project
     if !tree.Has("project") {
       msg_error("[CONF] Group project it's required")
     }
-    g_project := tree.Get("project").(*toml.TomlTree)
+    g_project := tree.Get("project").(*toml.Tree)
     // Validate repository location
     if !g_project.Has("path") {
       msg_error("[CONF] Project's code location it's required")
@@ -132,9 +130,9 @@ func load_config() {
     }
     // Validate schemas
     if tree.Has("database") {
-      schemas := tree.Get("database").(*toml.TomlTree)
+      schemas := tree.Get("database").(*toml.Tree)
       for _, schema_key := range schemas.Keys() {
-        schema := schemas.Get(schema_key).(*toml.TomlTree)
+        schema := schemas.Get(schema_key).(*toml.Tree)
         // Validate SQL dump
         if schema.Has("sql_dump") {
           sqldump := schema.Get("sql_dump").(string)
@@ -160,9 +158,11 @@ func load_config() {
       msg_error("[CONF] Habitat packages must be an array")
     }
     // Load primary results to add extra slice (workaround)
-    pres,_ := tree.Query("$.habitat.packages[0:-1]")
+    // pres,_ := tree.Query("$.habitat.packages[0:-1]")
+    pres,_ := query.CompileAndExecute("$.habitat.packages[0:-1]", tree)
     items := len(pres.Values())+1 // Workaround to get all the nodes
-    results,_ := tree.Query("$.habitat.packages[0:"+strconv.Itoa(items)+"]")
+    // results,_ := tree.Query("$.habitat.packages[0:"+strconv.Itoa(items)+"]")
+    results,_ := query.CompileAndExecute("$.habitat.packages[0:"+strconv.Itoa(items)+"]", tree)
     // Validate habitat and install
     hab_bin := hab_install(tree)
     // Iterate packages
@@ -173,5 +173,19 @@ func load_config() {
 }
 
 func main() {
-  load_config()
+  var toml_file string = "blue.toml"
+  // Validate argument
+  if len(os.Args) > 1 {
+    args := os.Args
+    matched, _ := regexp.MatchString("[a-z0-9].toml", args[1])
+    if matched {
+      toml_file = args[1]
+    }
+  }
+  // Validate and Load TOML file
+  if _, err := os.Stat(toml_file); os.IsNotExist(err) {
+    msg_error("TOML file: "+toml_file+" not found")
+  }
+  // Load TOML configuration
+  load_config(toml_file)
 }
