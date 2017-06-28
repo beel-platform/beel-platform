@@ -1,19 +1,19 @@
-FROM 147905667315.dkr.ecr.us-east-1.amazonaws.com/bluespark:base-hab0.20.0-centos7
+FROM 147905667315.dkr.ecr.us-west-1.amazonaws.com/bluespark:base_centos7-hab0.24.1
 
-LABEL name="Bluespark's LAMP (Apache / PHP7 / MySQL) image"
+LABEL name="Bluespark's (Apache / PHP7) container image"
 
-RUN hab pkg install bluespark/php7; \
+RUN hab pkg install bluespark/php7 && \
+    hab sup load bluespark/php7 && \
     hab pkg binlink bluespark/php7 php; \
     hab pkg binlink bluespark/php7 phar; \
     hab pkg binlink bluespark/php7 php-config; \
     hab pkg binlink bluespark/php7 phpdbg; \
     hab pkg binlink bluespark/php7 phpize; \
-    hab sup load bluespark/php7; \
-    hab pkg install bluespark/httpd; \
-    hab sup load bluespark/httpd; \
-    hab pkg install bluespark/mysql; \
-    hab sup load bluespark/mysql
+    hab pkg install bluespark/httpd && \
+    hab sup load bluespark/httpd;
 
-EXPOSE 80 3306
+EXPOSE 80
 
-ENTRYPOINT hab sup run
+ENTRYPOINT /bin/bash
+
+CMD hab sup run
