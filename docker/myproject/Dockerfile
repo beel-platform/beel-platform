@@ -14,6 +14,6 @@ RUN hab pkg install bluespark/php7 && \
 
 EXPOSE 80
 
-ENTRYPOINT /bin/bash
+ENTRYPOINT ["hab"]
 
-CMD hab sup run
+CMD ["sup", "run"]
