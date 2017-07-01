@@ -11,22 +11,23 @@ hostname = "localhost"
 database = "drupal_default"
 username = "drupal_default"
 password = "drupal_default"
-[database.foo]
-sql_dump = "/Users/bbh/Projects/demo/blue/test/foo.sql"
-hostname = "localhost"
-database = "drupal_foo"
-username = "drupal_foo"
-password = "drupal_foo"
-[database.bar]
-sql_dump = "/Users/bbh/Projects/demo/blue/test/bar.sql"
-hostname = "localhost"
-database = "drupal_bar"
-username = "drupal_bar"
-password = "drupal_bar"
+# [database.foo]
+# sql_dump = "/Users/bbh/Projects/demo/blue/test/foo.sql"
+# hostname = "localhost"
+# database = "drupal_foo"
+# username = "drupal_foo"
+# password = "drupal_foo"
+# [database.bar]
+# sql_dump = "/Users/bbh/Projects/demo/blue/test/bar.sql"
+# hostname = "localhost"
+# database = "drupal_bar"
+# username = "drupal_bar"
+# password = "drupal_bar"
 
 [docker]
-image = "147905667315.dkr.ecr.us-east-1.amazonaws.com/bluespark:base-hab0.20.0-centos7"
-container = "local-myproject-0.1.0"
+image_tag = "myproject:latest"
+image_base = "bluespark:base_centos7-hab0.24.1"
+registry = "147905667315.dkr.ecr.us-west-1.amazonaws.com/"
 
 [nexus]
 repository = ""
