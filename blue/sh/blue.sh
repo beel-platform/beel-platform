@@ -1,17 +1,5 @@
 #!/bin/bash
 
-# IMG_NAME='bluespark/myproject'
-# IMG_TAG='0.1.1'
-# IMG_BASE='bluespark/centos7-hab'
-#
-# DKR_VOLS=("$(stat -f ~/Projects/BSPWEB/web):/var/www/bsp")
-# DKR_PORTS='80'
-#
-# HAB_PKGS='bluespark/php7 bluespark/httpd'
-#
-# AWS_REG_ID='147905667315'
-# AWS_REGION='us-east-1'
-
 case ${1} in
   *.cfg) CONFIG_FILE=${1} ;;
   *) CONFIG_FILE='blue.cfg' ;;
