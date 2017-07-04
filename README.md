@@ -35,6 +35,12 @@ deploy environments, simplifying the application's delivering process.
 
 ---
 
+## Installation
+
+A guide to install and use __blue__ is provided within its own [README](sh/README.md) file.
+
+---
+
 ## Contact
 
 For more information contact the current maintainer: basilio@bluespark.com
