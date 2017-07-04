@@ -2,9 +2,13 @@
 
 case ${1} in
   *.cfg) CONFIG_FILE=${1} ;;
-  *) CONFIG_FILE='blue.cfg' ;;
+  *) CONFIG_FILE=./blue.cfg ;;
 esac
-CONFIG_FILE=$(stat -f ${CONFIG_FILE})
+case `uname -s` in
+  'Linux') CONFIG_FILE=$(realpath ${CONFIG_FILE}) ;;
+  'Darwin') CONFIG_FILE=$(stat -f ${CONFIG_FILE}) ;;
+  *) echo "Operating System not supported"; exit 1 ;;
+esac
 if [ ! -f ${CONFIG_FILE} ]; then
   echo "Provide a valid configuration file."
   exit 1
@@ -13,8 +17,21 @@ source ${CONFIG_FILE}
 IMG_NAME="bluespark/${name}"
 IMG_TAG=${version}
 IMG_BASE=${image_base}
-DKR_VOLS=("$(stat -f ${code_base}):${volume}")
-echo $DKR_VOLS
+case `uname -s` in
+  'Linux')
+    if [[ ! -d `realpath ${code_base} 2>/dev/null` ]]; then
+      echo "[ERROR] Code base location ($code_base) not found."
+      exit 1
+    fi
+    code_base=$(realpath ${code_base})
+    ;;
+  'Darwin') code_base=$(stat -f ${code_base}) ;;
+esac
+if [ ! -d ${code_base} ]; then
+  echo "Code base location ($code_base) not found"
+  exit 1
+fi
+DKR_VOLS=("${code_base}:${volume}")
 DKR_PORTS=${ports}
 HAB_PKGS=${packages}
 AWS_REG_ID=${ecr_id}
@@ -62,7 +79,12 @@ EOF
 
 function aws_login ()
 {
-  aws ecr get-login --no-include-email --region ${AWS_REGION} | bash
+  if [ ! `aws --v 2>/dev/null` ]; then
+    (aws ecr get-login --no-include-email --region ${AWS_REGION} || echo "Cannot connect to AWS ECR."; exit 1) | bash
+  else
+    echo "[ERROR] AWS Command Line Interface it's not installed"
+    exit 1
+  fi
 }
 
 if [[ `docker images --format "{{.Repository}}:{{.Tag}}" | grep ${IMG_NAME}:${IMG_TAG}` ]]; then
@@ -74,6 +96,7 @@ if [[ `docker images --format "{{.Repository}}:{{.Tag}}" | grep ${IMG_NAME}:${IM
   fi
 else
   echo "Docker image not found locally, checking in the registry"
+  aws_login
   if [[ `aws ecr list-images --registry-id ${AWS_REG_ID} --repository-name ${IMG_NAME} | grep ${IMG_TAG} 2>/dev/null` ]]; then
     echo "Docker image found in registry."
     docker pull ${AWS_REG_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${IMG_NAME}:${IMG_TAG}
