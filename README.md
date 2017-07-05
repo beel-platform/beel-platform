@@ -20,7 +20,7 @@ containers, and platform as a service.
 
 * __Docker__ is a tool that provides containers, an additional layer of
 abstraction and automation of _operating system level_ virtualization on Linux,
-Windows and MacOS. By using Docker __blue__ it's capable of distributing
+Windows and MacOS. By using Docker, __blue__ it's capable of distributing
 environments to development teams in a standardize and reliable way.
 
 The approach that __blue__ follows allows the operations team to focus on the
