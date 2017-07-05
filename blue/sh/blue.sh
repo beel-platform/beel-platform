@@ -79,7 +79,8 @@ EOF
 
 function aws_login ()
 {
-  if [ ! `aws --v 2>/dev/null` ]; then
+  aws --v 2>/dev/null
+  if [[ $? == 0 ]]; then
     (aws ecr get-login --no-include-email --region ${AWS_REGION} || echo "Cannot connect to AWS ECR."; exit 1) | bash
   else
     echo "[ERROR] AWS Command Line Interface is not installed"
