@@ -29,9 +29,10 @@ That guarantees continuous improvement on the platform and leads to a reliable
 service.
 
 __spark__ is still work in progress and its goal is to provide the same service
-as __blue__, but instead of focusing on local environments it will use several
-cloud services like Amazon Web Server, Google Cloud, etc. to distribute and
-deploy environments, simplifying the application's delivering process.
+as __blue__, but instead of focusing on local environments it will be able to
+utilize cloud services like Amazon Web Services, Google Cloud, etc. to
+distribute and deploy environments, simplifying the application's delivering
+process.
 
 ---
 
