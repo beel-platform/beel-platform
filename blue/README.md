@@ -2,13 +2,13 @@
 
 ## Description and current status
 
-__blue__ was originally designed to be written using the [Go](https://golang.org/) language,
-its purpose is to automate two main tasks: to build custom _Habitat_ packages,
-and to create & distribute custom _Docker_ images & containers.
+__blue__ was originally designed to be written using the [Go](https://golang.org/)
+language, its purpose is to automate two main tasks: to build custom _Habitat_
+packages, and to create & distribute custom _Docker_ images & containers.
 
 It was written as planned, and it's capable of installing _habitat_ and to build
-custom packages. However, due to an issue with the Docker' Go library the second
-task, has been completed using [Bash](https://www.gnu.org/software/bash/).
+custom packages. However, due to an issue with the Docker's Go SDK, the second
+task has been completed using [Bash](https://www.gnu.org/software/bash/).
 
 Because of that, the _Habitat_ automated tasks are still work in progress, until
 the issue gets fixed. However, the project *it's usable* if the current available
