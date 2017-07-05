@@ -3,8 +3,8 @@
 ## Description and current status
 
 __blue__ was originally designed to be written using the [Go](https://golang.org/) language,
-to automate two main tasks: to build custom _Habitat_ packages, and to create &
-distribute custom _Docker_ images & containers.
+its purpose is to automate two main tasks: to build custom _Habitat_ packages,
+and to create & distribute custom _Docker_ images & containers.
 
 It was written as planned, and it's capable of installing _habitat_ and to build
 custom packages. However, due to an issue with the Docker' Go library the second
@@ -17,7 +17,7 @@ packages are enough for your project.
 ## Available packages
 
 The entire list of available packages is located at the [habitat depot](https://bldr.habitat.sh/#/origins/bluespark).
-These are the packages that had been already tested.
+These are the packages that had been already tested:
 
 * bluespark/php5
 * bluespark/php7
@@ -65,8 +65,9 @@ These are the packages that had been already tested.
 ## Troubleshooting
 * Permissions on docker's daemon socket file. Usually adding the unprivileged
 user to the `docker` group should fix this issue, however, if that doesn't works
-and you're running __blue__ in a local machine, you can cheat a bit and
-```bash
-sudo chmod 666 /var/run/docker.sock
-```
-this is not a best practice, but for a local environment it solves the problem.
+and you're running __blue__ in a local machine, you can cheat a bit by changing
+the mode to `666` and allow all users to write. It is not a best practice,
+but for a local environment it solves the problem.
+  ```bash
+  sudo chmod 666 /var/run/docker.sock
+  ```
