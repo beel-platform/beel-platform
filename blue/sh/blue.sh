@@ -5,7 +5,7 @@ case ${1} in
   *) CONFIG_FILE=./blue.cfg ;;
 esac
 case `uname -s` in
-  'Linux') CONFIG_FILE=$(realpath ${CONFIG_FILE}) ;;
+  'Linux') CONFIG_FILE=$(readlink -e ${CONFIG_FILE}) ;;
   'Darwin') CONFIG_FILE=$(stat -f ${CONFIG_FILE}) ;;
   *) echo "Operating System not supported"; exit 1 ;;
 esac
@@ -19,11 +19,11 @@ IMG_TAG=${version}
 IMG_BASE=${image_base}
 case `uname -s` in
   'Linux')
-    if [[ ! -d `realpath ${code_base} 2>/dev/null` ]]; then
+    if [[ ! -d `readlink -e ${code_base} 2>/dev/null` ]]; then
       echo "[ERROR] Code base location ($code_base) not found."
       exit 1
     fi
-    code_base=$(realpath ${code_base})
+    code_base=$(readlink -e ${code_base})
     ;;
   'Darwin') code_base=$(stat -f ${code_base}) ;;
 esac
@@ -82,12 +82,21 @@ function aws_login ()
   if [ ! `aws --v 2>/dev/null` ]; then
     (aws ecr get-login --no-include-email --region ${AWS_REGION} || echo "Cannot connect to AWS ECR."; exit 1) | bash
   else
-    echo "[ERROR] AWS Command Line Interface it's not installed"
+    echo "[ERROR] AWS Command Line Interface is not installed"
     exit 1
   fi
 }
 
-if [[ `docker images --format "{{.Repository}}:{{.Tag}}" | grep ${IMG_NAME}:${IMG_TAG}` ]]; then
+# Validate if Docker is running
+if [[ ! `docker -v 2>/dev/null` ]]; then
+  echo "[ERROR] Docker is not installed"
+  exit 1
+fi
+
+if [[ `docker images 2>&1 | grep 'Cannot connect' 2>/dev/null` ]]; then
+  echo "[ERROR] Docker is not running"
+  exit 1
+elif [[ `docker images --format "{{.Repository}}:{{.Tag}}" | grep ${IMG_NAME}:${IMG_TAG} 2>/dev/null` ]]; then
   echo "Docker image ${IMG_NAME} found locally."
   aws_login
   if [[ ! `aws ecr list-images --registry-id ${AWS_REG_ID} --repository-name ${IMG_NAME} | grep ${IMG_TAG} 2>/dev/null` ]]; then
@@ -111,7 +120,7 @@ if [[ ! `docker ps -a --format "{{.Image}}" | grep ${IMG_NAME}:${IMG_TAG}` ]]; t
   -v $(for i in ${DKR_VOLS[@]}; do echo "${i}"; done) \
   ${AWS_REG_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${IMG_NAME}:${IMG_TAG}
   echo "Running: docker run -td -p $(for i in ${DKR_PORTS}; do echo "${i}:${i}"; done) \
--v $(for i in ${DKR_VOLS[@]}; do echo "$(stat -f ${i})"; done) \
+-v $(for i in ${DKR_VOLS[@]}; do echo "${i}"; done) \
 ${AWS_REG_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${IMG_NAME}:${IMG_TAG}"
 else
   echo "Container with image ${IMG_NAME}:${IMG_TAG} already running."
