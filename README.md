@@ -37,7 +37,7 @@ deploy environments, simplifying the application's delivering process.
 
 ## Installation
 
-A guide to install and use __blue__ is provided within its own [README](blue/README.md) file.
+A guide to install and use __blue__ is provided within its own [README](blue/) file.
 
 ---
 
