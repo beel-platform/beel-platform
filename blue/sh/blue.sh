@@ -81,7 +81,7 @@ function aws_login ()
 {
   aws --v 2>/dev/null
   if [ $? == 0 ]; then
-    aws ecr get-login --region ${AWS_REGION} 2>/dev/null
+    aws ecr get-login --region ${AWS_REGION} | echo > /dev/null
     if [ $? == 0 ]; then
       aws ecr get-login --no-include-email --region ${AWS_REGION} | bash
     else
