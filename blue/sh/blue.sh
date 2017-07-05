@@ -79,13 +79,10 @@ EOF
 
 function aws_login ()
 {
-  aws --v 2>/dev/null
-  if [ $? == 0 ]; then
-    aws ecr get-login --region ${AWS_REGION} | echo > /dev/null
-    if [ $? == 0 ]; then
+  if aws --v 2>/dev/null; then
+    if aws ecr get-login --region ${AWS_REGION} 1>/dev/null; then
       aws ecr get-login --no-include-email --region ${AWS_REGION} | bash
     else
-      echo 'Unable to locate AWS credentials. You can configure credentials by running "aws configure".'
       exit 1
     fi
   else
