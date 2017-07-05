@@ -64,7 +64,7 @@ These are the packages that had been already tested:
 
 ## Troubleshooting
 * Permissions on docker's daemon socket file. Usually adding the unprivileged
-user to the `docker` group should fix this issue, however, if that doesn't works
+user to the `docker` group should fix this issue. However, if that doesn't work
 and you're running __blue__ in a local machine, you can cheat a bit by changing
 the mode to `666` and allow all users to write. It is not a best practice,
 but for a local environment it solves the problem.
