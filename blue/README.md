@@ -17,7 +17,7 @@ packages are enough for your project.
 ## Available packages
 
 The entire list of available packages is located at the [habitat depot](https://bldr.habitat.sh/#/origins/bluespark).
-There are the packages that had been already tested.
+These are the packages that had been already tested.
 
 * bluespark/php5
 * bluespark/php7
