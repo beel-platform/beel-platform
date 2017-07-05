@@ -28,25 +28,25 @@ These are the packages that had been already tested.
   * For MacOS you can follow the the [official installation guide](https://docs.docker.com/docker-for-mac/install/).
   * For Linux
     * Make sure that your docker service is running.
-    ```bash
-    sudo service docker start
-    ```
+      ```bash
+      sudo service docker start
+      ```
     * Linux __sudo issue__. There's an _"issue"_ with the docker's socket
     permissions, the `/var/run/docker.sock` requires write permissions to
     execute docker, however the permissions by default belong to `root` as `660`,
     even if we do not recommend to run __blue__ using `root`, the issue remains,
     there's a solution by adding your unprivileged user to the docker group
-    ```bash
-    sudo usermod -aG docker <your_unprivileged_user>
-    ```
+      ```bash
+      sudo usermod -aG docker <your_unprivileged_user>
+      ```
 * Install AWS Command Line Interface
   * For MacOS you can follow the [official installation guide](http://docs.aws.amazon.com/cli/latest/userguide/cli-install-macos.html).
   * For Linux
-  ```bash
-  curl https://bootstrap.pypa.io/get-pip.py | sudo python
-  sudo pip install awscli
-  ```
-  * Configure your AWS credentials. You can get these settings from 1password.
+    ```bash
+    curl https://bootstrap.pypa.io/get-pip.py | sudo python
+    sudo pip install awscli
+    ```
+* Configure your AWS credentials. You can get these settings from 1password.
   ```bash
   $ aws configure
   AWS Access Key ID [None]: <ACCESS_KEY_ID>
@@ -57,9 +57,9 @@ These are the packages that had been already tested.
 
 ## Installation
 * Clone the repository:
-```bash
-git clone git@github.com:BluesparkLabs/bluespark-platform.git
-```
+  ```bash
+  git clone git@github.com:BluesparkLabs/bluespark-platform.git
+  ```
 * Copy the configuration example to your project
 
 ## Troubleshooting
