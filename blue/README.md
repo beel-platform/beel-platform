@@ -34,7 +34,7 @@ These are the packages that had been already tested:
     curl https://bootstrap.pypa.io/get-pip.py | sudo python
     sudo pip install awscli
     ```
-* Configure your AWS credentials. You can get these credentials from 1password.
+* Configure your AWS credentials. You can get these credentials from 1password, search for _AWS bsp_dev_.
   ```bash
   $ aws configure
   AWS Access Key ID [None]: <ACCESS_KEY_ID>
