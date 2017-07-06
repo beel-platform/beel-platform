@@ -1,4 +1,5 @@
 .git
+myproject
 vm
 vm/tmp
 vm/.hab
@@ -11,4 +12,3 @@ blue/go/src/blue/docker
 blue/go/src/github.com
 blue/go/pkg
 hab/solr
-blue/myproject
