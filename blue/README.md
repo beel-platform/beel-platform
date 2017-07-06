@@ -1,4 +1,4 @@
-# blue's installation and use guide.
+# Installation and use guide.
 
 ## Description and current status
 __blue__ was originally designed to be written using the [Go](https://golang.org/)
@@ -48,7 +48,16 @@ These are the packages that had been already tested:
   ```bash
   git clone git@github.com:BluesparkLabs/bluespark-platform.git
   ```
-* Copy the configuration example to your project
+* Create a test directory, copy the configuration and run __blue__.
+  ```bash
+  cd bluespark-platform
+  mkdir myproject
+  cp blue/sh/blue.cfg myproject/
+  cd myproject
+  ../blue/sh/blue.sh
+  ```
+* If everything works as expected, now you can create your own project and
+configure your blue.cfg file according to your needs.
 
 ## Troubleshooting
 * Permissions on docker's daemon socket file.
