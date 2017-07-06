@@ -91,7 +91,6 @@ function aws_login ()
   fi
 }
 
-# Validate if Docker is running
 if [[ ! `docker -v 2>/dev/null` ]]; then
   echo "[ERROR] Docker is not installed"
   exit 1
