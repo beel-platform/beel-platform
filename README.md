@@ -45,3 +45,9 @@ A guide to install and use __blue__ is provided within its own [README](blue/) f
 ## Contact
 
 For more information contact the current maintainer: basilio@bluespark.com
+
+---
+
+## Credits
+
+Initial research, development and proof of concept sponsored by [Bluespark](https://www.bluespark.com)
