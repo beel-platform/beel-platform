@@ -7,8 +7,8 @@ vm/.vagrant
 chef
 hab/*/results
 hab/*/files
-blue/go/src/blue/blue
-blue/go/src/blue/docker
-blue/go/src/github.com
-blue/go/pkg
+beel/go/src/blue/blue
+beel/go/src/blue/docker
+beel/go/src/github.com
+beel/go/pkg
 hab/solr
